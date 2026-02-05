@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: sked
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sked_db
+    username: sked_user
+    password: sked_password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true

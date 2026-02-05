@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: kinero-postgres
+    environment:
+      POSTGRES_DB: kinero_db
+      POSTGRES_USER: kinero_user
+      POSTGRES_PASSWORD: kinero_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - kinero_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  kinero_postgres_data:
