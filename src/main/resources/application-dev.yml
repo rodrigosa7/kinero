@@ -1,11 +1,11 @@
 spring:
   application:
-    name: sked
+    name: kinero
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/sked_db
-    username: sked_user
-    password: sked_password
+    url: jdbc:postgresql://localhost:5432/kinero_db
+    username: kinero_user
+    password: kinero_password
 
   jpa:
     hibernate:
