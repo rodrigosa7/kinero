@@ -6,14 +6,11 @@ import dev.kinero.kinerobackend.user.model.User;
 import dev.kinero.kinerobackend.user.service.UserService;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.Instant;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
