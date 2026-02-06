@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -32,5 +33,25 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handleValidationExceptions(
+            MethodArgumentNotValidException ex, WebRequest request
+    ) {
+        log.error("Validation exception", ex);
+
+        String correlationId = MDC.get("correlationId");
+
+        ApiError apiError = new ApiError(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getBindingResult().getAllErrors().getFirst().getDefaultMessage(),
+                request.getDescription(false),
+                correlationId
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 }
