@@ -25,4 +25,7 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     @Column(nullable = false)
     private Instant updatedAt;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 }

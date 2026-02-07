@@ -54,4 +54,44 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiError> handleResourceNotFoundException(
+            ResourceNotFoundException ex, WebRequest request
+    ) {
+        log.warn("Resource not found: {}", ex.getMessage());
+
+        String correlationId = MDC.get("correlationId");
+
+        ApiError apiError = new ApiError(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                ex.getMessage(),
+                request.getDescription(false),
+                correlationId
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleResourceAlreadyExistsException(
+            ResourceAlreadyExistsException ex, WebRequest request
+    ) {
+        log.warn("Resource already exists: {}", ex.getMessage());
+
+        String correlationId = MDC.get("correlationId");
+
+        ApiError apiError = new ApiError(
+                Instant.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                ex.getMessage(),
+                request.getDescription(false),
+                correlationId
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
+    }
 }

@@ -1,5 +1,7 @@
 package dev.kinero.kinerobackend.user.service;
 
+import dev.kinero.kinerobackend.common.error.ResourceAlreadyExistsException;
+import dev.kinero.kinerobackend.common.error.ResourceNotFoundException;
 import dev.kinero.kinerobackend.user.model.User;
 import dev.kinero.kinerobackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,8 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public User register(String email, String rawPassword) {
-        if(userRepository.findUserByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("Email already in use");
+        if(userRepository.findByEmail(email).isPresent()) {
+            throw new ResourceAlreadyExistsException("User", "email", email);
         }
 
         User user = User.builder()
@@ -32,14 +34,14 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
     }
 
     @Override
     public User findById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 
     public Integer calculateAge(User user) {

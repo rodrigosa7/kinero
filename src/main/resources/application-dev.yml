@@ -12,3 +12,8 @@ spring:
       ddl-auto: update
     open-in-view: false
     show-sql: true
+
+jwt:
+  secret: dev-secret-key-for-testing-only-must-be-at-least-32-characters-long
+  expiration: 31536000000  # 1 year in milliseconds
+

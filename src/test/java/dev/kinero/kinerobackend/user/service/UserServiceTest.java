@@ -53,7 +53,7 @@ class UserServiceTest {
         assertThat(user.getPassword()).isNotEqualTo("password123"); // hashed
 
         // Verify persisted in PostgreSQL
-        User savedUser = userRepository.findUserByEmail(email).orElse(null);
+        User savedUser = userRepository.findByEmail(email).orElse(null);
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getId()).isNotNull();
     }
@@ -72,7 +72,7 @@ class UserServiceTest {
 
         assertThat(exception.getMessage()).isEqualTo("Email already in use");
 
-        User savedUser = userRepository.findUserByEmail(email).orElse(null);
+        User savedUser = userRepository.findByEmail(email).orElse(null);
         assertThat(savedUser).isNotNull();
     }
 
