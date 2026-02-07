@@ -1,5 +1,6 @@
 package dev.kinero.kinerobackend.user.service;
 
+import dev.kinero.kinerobackend.common.error.ResourceAlreadyExistsException;
 import dev.kinero.kinerobackend.user.model.User;
 import dev.kinero.kinerobackend.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -65,12 +66,12 @@ class UserServiceTest {
         userService.register(email, "password123");
 
         // When & Then
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        ResourceAlreadyExistsException exception = assertThrows(
+                ResourceAlreadyExistsException.class,
                 () -> userService.register(email, "different-password")
         );
 
-        assertThat(exception.getMessage()).isEqualTo("Email already in use");
+        assertThat(exception.getMessage()).isEqualTo("User already exists with email: 'duplicate@example.com'");
 
         User savedUser = userRepository.findByEmail(email).orElse(null);
         assertThat(savedUser).isNotNull();

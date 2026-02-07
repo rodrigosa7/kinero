@@ -2,11 +2,11 @@
 GET http://localhost:8080/api/ping
 
 ###
-POST http://localhost:8080/api/users/register
+POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "user123@email.com",
+  "email": "user13@email.com",
   "password": "123456"
 }
 

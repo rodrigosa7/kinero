@@ -2,9 +2,11 @@ package dev.kinero.kinerobackend.auth.controller;
 
 import dev.kinero.kinerobackend.auth.dto.AuthResponse;
 import dev.kinero.kinerobackend.auth.dto.LoginRequest;
+import dev.kinero.kinerobackend.auth.dto.RegisterRequest;
 import dev.kinero.kinerobackend.auth.service.JwtService;
 import dev.kinero.kinerobackend.user.model.User;
 import dev.kinero.kinerobackend.user.service.UserService;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,17 @@ public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final MeterRegistry meterRegistry;
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        User user = userService.register(request.email(), request.password());
+        String token = jwtService.generateToken(user);
+
+        meterRegistry.counter("user.registration.count").increment();
+
+        return ResponseEntity.status(201).body(new AuthResponse(token));
+    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
